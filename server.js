@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
-mongoose.set("strictQuery", true);
 
 dotenv.config({ path: "config.env" });
 mongoose
