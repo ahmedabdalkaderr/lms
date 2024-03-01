@@ -3,6 +3,9 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
+const admin = require('./routes/admin');
+const auth = require('./routes/authentication');
+
 
 dotenv.config({ path: "config.env" });
 mongoose
@@ -21,7 +24,6 @@ const app = express();
 const PORT = process.env.PORT;
 
 
-
 app.use(express.json());
 
 // Middlewares
@@ -30,25 +32,8 @@ if (process.env.NODE_ENV === "development") {
   console.log("mode: development");
 }
 
-const userSchema = mongoose.Schema({
-  name: String,
-});
-
-const UserModel = mongoose.model("User", userSchema);
-
-app.post("/", (req, res) => {
-  const name = req.body.name;
-  const newuser = new UserModel({ name });
-  newuser.save().then((doc) => {
-    console.log(doc);
-  });
-  res.send({ data: newuser });
-});
-
-// Routes
-app.get("/", (req, res) => {
-  res.send("Our API v1");
-});
+app.use('/admin', admin);
+app.use('/authentication', auth);
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}`);
