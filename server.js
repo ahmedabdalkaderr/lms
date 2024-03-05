@@ -3,8 +3,11 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
-const admin = require('./routes/admin');
-const auth = require('./routes/authentication');
+const global = require("./middlewares/middlewaresError");
+const apiError = require('./utils/apiError');
+const userRoute = require("./routes/userRoute")
+const authRoute = require("./routes/authRoute");
+
 
 
 dotenv.config({ path: "config.env" });
@@ -32,8 +35,14 @@ if (process.env.NODE_ENV === "development") {
   console.log("mode: development");
 }
 
-app.use('/admin', admin);
-app.use('/authentication', auth);
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/auth', authRoute);
+
+app.all("*", (req, res, next) => {
+  next(new apiError(`This url is not exist: ${req.url}`, 400));
+});
+
+app.use(global);
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}`);
