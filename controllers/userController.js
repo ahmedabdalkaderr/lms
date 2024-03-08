@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
-const apiError = require("../utils/apiError");
+const ApiError = require("../utils/apiError");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find();
@@ -19,7 +19,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const user = await User.findById(id);
   if (!user) {
-    return next(new apiError(`No user exist with this id: ${id}`, 404));
+    return next(new ApiError(`No user exist with this id: ${id}`, 404));
   }
   res.status(200).json({
     status: "success",
@@ -35,7 +35,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 
   let user = await User.findOne({ email });
   if (user) {
-    return next(new apiError("E-mail already exists", 400));
+    return next(new ApiError("E-mail already exists", 400));
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -65,7 +65,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   );
 
   if (!user) {
-    return next(new apiError(`No user exist with this id: ${id}`, 404));
+    return next(new ApiError(`No user exist with this id: ${id}`, 404));
   }
 
   return res.status(200).json({
@@ -81,7 +81,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 
   const user = await User.findByIdAndDelete(id);
   if (!user) {
-    return next(new apiError(`No user exist with this id: ${id}`, 404));
+    return next(new ApiError(`No user exist with this id: ${id}`, 404));
   }
   res.status(204).json({
     message: "User deleted successfully",

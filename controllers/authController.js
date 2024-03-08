@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const asyncHandler = require('express-async-handler')
 
-const apiError = require("../utils/apiError");
+const ApiError = require("../utils/apiError");
 const User = require("../models/userModel");
 
 exports.logIn = asyncHandler(async (req, res, next) => {
@@ -16,7 +16,7 @@ exports.logIn = asyncHandler(async (req, res, next) => {
   }
 
   if (!isEqual || !user) {
-    return next(new apiError("email or password is not correct", 400));
+    return next(new ApiError("email or password is not correct", 400));
   }
 
   const token = jwt.sign(
