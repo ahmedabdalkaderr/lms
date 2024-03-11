@@ -24,7 +24,6 @@ const courseSchema = new Schema(
 );
 
 const setImage = (doc) => {
-  console.log(doc);
   if (doc.image) {
     const imageUrl = `${process.env.BASE_URL}/courses/${doc.image}`;
     doc.image = imageUrl;
