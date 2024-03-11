@@ -1,9 +1,11 @@
 const path = require("path");
 
+const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+
 
 const global = require("./middlewares/middlewaresError");
 const ApiError = require("./utils/apiError");
@@ -21,6 +23,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
 // Middlewares
