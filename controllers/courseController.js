@@ -44,9 +44,6 @@ exports.getCourses = asyncHandler(async (req, res) => {
 exports.createCourse = asyncHandler(async (req, res, next) => {
 
   const course = await Course.create(req.body);
-  const courseMaterial = await Material.create({course:course._id});
-  course.materials = courseMaterial._id;
-  await course.save();
   res.status(201).json({
     status: "success",
     data: {
