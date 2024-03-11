@@ -15,20 +15,6 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getUser = asyncHandler(async (req, res, next) => {
-  const id = req.params.id;
-  const user = await User.findById(id);
-  if (!user) {
-    return next(new ApiError(`No user exist with this id: ${id}`, 404));
-  }
-  res.status(200).json({
-    status: "success",
-    data: {
-      user,
-    },
-  });
-});
-
 exports.createUser = asyncHandler(async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -45,6 +31,21 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     message: "User created successfully",
+    data: {
+      user,
+    },
+  });
+});
+
+
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const user = await User.findById(id);
+  if (!user) {
+    return next(new ApiError(`No user exist with this id: ${id}`, 404));
+  }
+  res.status(200).json({
+    status: "success",
     data: {
       user,
     },

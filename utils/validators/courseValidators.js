@@ -3,7 +3,7 @@ const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const Course = require("../../models/courseModel");
 
 exports.createCourseValidator = [
-  check("name")
+  body("name")
     .notEmpty()
     .withMessage("Enter course name")
     .custom((val) =>

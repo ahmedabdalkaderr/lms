@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
+const materialRoute = require('./materialRoute');
 const {
   createCourseValidator,
   getCourseValidator,
@@ -7,15 +8,27 @@ const {
   deleteCourseValidator,
 } = require("../utils/validators/courseValidators");
 
-const courseController = require("../controllers/courseController");
+const {
+  getCourses,
+  createCourse,
+  getCourse,
+  updateCourse,
+  deleteCourse,
+  uploadCourseImage,
+  resizeImage,
+} = require("../controllers/courseController");
 
-router.get("/", courseController.getCourses);
-router.post("/",createCourseValidator, courseController.createCourse);
+router.use("/:courseId/materials", materialRoute);
+
+router
+  .route("/")
+  .get(getCourses)
+  .post(uploadCourseImage, resizeImage, createCourseValidator, createCourse);
 
 router
   .route("/:id")
-  .get(getCourseValidator, courseController.getCourse)
-  .put(updateCourseValidator, courseController.updateCourse)
-  .delete(deleteCourseValidator,courseController.deleteCourse);
+  .get(getCourseValidator, getCourse)
+  .put(uploadCourseImage, resizeImage, updateCourseValidator, updateCourse)
+  .delete(deleteCourseValidator, deleteCourse);
 
 module.exports = router;

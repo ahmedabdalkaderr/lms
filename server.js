@@ -1,3 +1,5 @@
+const path = require("path");
+
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -8,6 +10,7 @@ const ApiError = require("./utils/apiError");
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
 const courseRoute = require("./routes/courseRoute");
+const materialRoute = require("./routes/materialRoute");
 
 dotenv.config({ path: "config.env" });
 mongoose.connect(process.env.DB_URI).then((con) => {
@@ -19,7 +22,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, "uploads")));
 // Middlewares
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -29,6 +32,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/courses", courseRoute);
+app.use("/api/v1/materials", materialRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`This url is not exist: ${req.url}`, 400));

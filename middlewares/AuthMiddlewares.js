@@ -18,7 +18,7 @@ exports.isAuthenticated = asyncHandler(async (req, res, next) => {
       new apiError("you are not login, please login to access this route", 401)
     );
   }
-
+  console.log(authHeader);
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   const currentUser = await User.findById(decoded.userId);
 
