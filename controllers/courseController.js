@@ -44,6 +44,7 @@ exports.getCourses = asyncHandler(async (req, res) => {
 exports.createCourse = asyncHandler(async (req, res, next) => {
 
   const course = await Course.create(req.body);
+
   res.status(201).json({
     status: "success",
     data: {
