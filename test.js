@@ -14,6 +14,8 @@ const getCourses = async () => {
   }
 };
 
+
+
 const addCourse = async (formData) => {
   try {
     const response = await axios.post(
