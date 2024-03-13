@@ -17,12 +17,12 @@ exports.createCourseValidator = [
 ];
 
 exports.getCourseValidator = [
-  check("id").isMongoId().withMessage("Invalid user id format"),
+  check("id").isMongoId().withMessage("Invalid course id format"),
   validatorMiddleware,
 ];
 
 exports.updateCourseValidator = [
-  check("id").isMongoId().withMessage("Invalid user id format"),
+  check("id").isMongoId().withMessage("Invalid course id format"),
   body("name")
     .optional()
     .custom((val) =>
@@ -36,6 +36,6 @@ exports.updateCourseValidator = [
 ];
 
 exports.deleteCourseValidator = [
-  check("id").isMongoId().withMessage("Invalid User id format"),
+  check("id").isMongoId().withMessage("Invalid course id format"),
   validatorMiddleware,
 ];

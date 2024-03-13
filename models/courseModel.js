@@ -15,17 +15,15 @@ const courseSchema = new Schema(
     },
     image: String,
     instructor: String,
-    materials: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Material",
-    },
+
   },
   { timestamps: true }
 );
 
 const setImage = (doc) => {
-  if (doc.image) {
-    const imageUrl = `${process.env.BASE_URL}/courses/${doc.image}`;
+  const img = doc.image;
+  if (img && !img.startsWith('h')) {
+    const imageUrl = `${process.env.BASE_URL}/courses/${img}`;
     doc.image = imageUrl;
   }
 };

@@ -1,46 +1,29 @@
 const asyncHandler = require("express-async-handler");
-const multer = require('multer');
-const { v4: uuidv4 } = require("uuid");
 
 const ApiError = require("../utils/apiError");
-// const { uploadSingleFile } = require("../middlewares/uploadfilesMiddlewares");
+const { uploadSingleFile } = require("../middlewares/uploadfilesMiddlewares");
 const Material = require("../models/materialModel");
 
-const multerStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, `uploads/materials`);
-  },
-  filename: function (req, file, cb) {
-    console.log(file);
-    const ext = file.mimetype.split("/")[1];
-    const fileName = `materials-${uuidv4()}-${Date.now()}.${ext}`;
-    req.body.specification = fileName;
-    cb(null, fileName);
-  },
-});
-const upload = multer({ storage: multerStorage });
+exports.uploadMaterialFile = uploadSingleFile("file", "materials");
 
-exports.uploadMaterialSepcification = upload.single("specification");
-
-// exports.getMaterials = asyncHandler(async (req, res) => {
-//   const materials = await Material.find();
-//   res.status(200).json({
-//     status: "success",
-//     length: materials.length,
-//     data: {
-//       materials,
-//     },
-//   });
-// });
-
-exports.getMaterials = asyncHandler(async (req, res, next) => {
-  let materials;
-  if (req.params.courseId)
-    materials = await Material.findOne({ course: req.params.courseId });
-  else materials = await Material.find();
-
+exports.createMaterial = asyncHandler(async (req, res, next) => {
+  if(req.params.courseId) req.body.course = req.params.courseId;
+  const material = await Material.create(req.body);
   res.status(200).json({
     status: "success",
+    data: {
+      material,
+    },
+  });
+});
+
+exports.getMaterials = asyncHandler(async (req, res, next) => {
+  if (req.params.courseId) req.query.course = req.params.courseId;
+
+  const materials = await Material.find(req.query);
+  res.status(200).json({
+    status: "success",
+    length: materials.length,
     data: {
       materials,
     },
@@ -62,11 +45,9 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
 
 exports.updateMaterial = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  console.log(req.body.specification);
   const material = await Material.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-  // console.log(material);
 
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
