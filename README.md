@@ -2,7 +2,6 @@ PORT=5000
 NODE_ENV=development
 BASE_URL= http://localhost:5000
 
-# DateBase
 
 DB_USER=abdelkdaer-nofal
 DB_PASSWORD=6FFmIg7TbI9gURGa
