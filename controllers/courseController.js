@@ -8,17 +8,10 @@ const {
   uploadSingleFile,
 } = require("../middlewares/uploadfilesMiddlewares");
 const ApiError = require("../utils/apiError");
-const Material = require("../models/materialModel");
 const Course = require("../models/courseModel");
-
-exports.uploadCourseSpecification = uploadSingleFile(
-  "specification",
-  "courses"
-);
 
 exports.uploadCourseImage = uploadSingleImage("image");
 exports.resizeImage = asyncHandler(async (req, res, next) => {
-  console.log(req.file);
   if (req.file) {
     const imageName = `course-${uuidv4()}-${Date.now()}.jpeg`;
     await sharp(req.file.buffer)
@@ -89,7 +82,6 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
 
   const course = await Course.findByIdAndDelete(id);
   if (!course) {
-    console.log(5);
     return next(new ApiError(`No course exist with this id: ${id}`, 404));
   }
   res.status(204).json({
