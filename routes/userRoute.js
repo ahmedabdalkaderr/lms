@@ -13,7 +13,7 @@ const {
 
 const userController = require("../controllers/userController");
 
-router.use(isAuthenticated, allowedTo("admin"));
+// router.use(isAuthenticated, allowedTo("admin"));
 
 router.get("/", userController.getUsers);
 router.post("/", createUserValidator, userController.createUser);

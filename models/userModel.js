@@ -6,17 +6,17 @@ const userSchema = new Schema(
     name: {
       type: String,
       trim: true,
-      required: [true, "User name required"],
+      // required: [true, "User name required"],
     },
     email: {
       type: String,
-      required: [true, "User email required"],
+      // required: [true, "User email required"],
       unique: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: [true, "password must be included"],
+      // required: [true, "password must be included"],
     },
     role: {
       type: String,
