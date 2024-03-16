@@ -2,16 +2,19 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 
+const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.find();
+  const apiFeatures = new ApiFeatures(User.find(), req.query);
+  apiFeatures.filter().sort().limitFields().search();
+  const { mongooseQuery } = apiFeatures;
+
+  const users = await mongooseQuery;
+
   res.status(200).json({
-    status: "success",
-    length: users.length,
-    data: {
-      users,
-    },
+    results: users.length,
+    data: users,
   });
 });
 
@@ -37,7 +40,6 @@ exports.createUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 exports.getUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const user = await User.findById(id);
@@ -60,7 +62,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     {
       name: req.body.name,
       email: req.body.email,
-      password: await bcrypt.hash(req.body.password,12),
+      password: await bcrypt.hash(req.body.password, 12),
     },
     { new: true }
   );

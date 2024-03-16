@@ -7,6 +7,7 @@ const {
   uploadSingleImage,
   uploadSingleFile,
 } = require("../middlewares/uploadfilesMiddlewares");
+const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 const Course = require("../models/courseModel");
 
@@ -25,18 +26,25 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 });
 
 exports.getCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find();
+  let filter = {};
+  if (req.filterObj) filter = req.filterObj;
+  const apiFeatures = new ApiFeatures(Course.find(filter), req.query);
+  apiFeatures
+    .filter()
+    .sort()
+    .limitFields()
+    .search();
+  const {mongooseQuery} = apiFeatures;
+
+  const courses = await mongooseQuery;
+
   res.status(200).json({
-    status: "success",
-    length: courses.length,
-    data: {
-      courses,
-    },
+    results: courses.length,
+    data: courses,
   });
 });
 
 exports.createCourse = asyncHandler(async (req, res, next) => {
-
   const course = await Course.create(req.body);
 
   res.status(201).json({
