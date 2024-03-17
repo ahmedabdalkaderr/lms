@@ -40,7 +40,7 @@ exports.getCourses = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     results: courses.length,
-    data: courses,
+    data: {courses},
   });
 });
 

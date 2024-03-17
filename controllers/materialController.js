@@ -31,7 +31,7 @@ exports.getMaterials = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     results: materials.length,
-    data: materials,
+    data: {materials},
   });
 });
 
