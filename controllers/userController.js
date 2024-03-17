@@ -13,7 +13,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     results: users.length,
-    data: { users },
+    data: {users},
   });
 });
 
@@ -55,7 +55,15 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+  const user = await User.findByIdAndUpdate(
+    id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      year: req.body.year
+    },
+    { new: true }
+  );
 
   if (!user) {
     return next(new ApiError(`No user exist with this id: ${id}`, 404));
