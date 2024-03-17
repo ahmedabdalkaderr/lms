@@ -18,9 +18,7 @@ const userSchema = new Schema(
       type: String,
       // required: [true, "password must be included"],
     },
-    year:{
-      type:String,
-    },
+    year: String,
     role: {
       type: String,
       enum: ["user", "admin"],

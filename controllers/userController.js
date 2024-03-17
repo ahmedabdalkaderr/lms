@@ -9,7 +9,6 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   const apiFeatures = new ApiFeatures(User.find(), req.query);
   apiFeatures.filter().sort().limitFields().search();
   const { mongooseQuery } = apiFeatures;
-
   const users = await mongooseQuery;
 
   res.status(200).json({
@@ -56,13 +55,12 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.params.id);
   const user = await User.findByIdAndUpdate(
     id,
     {
       name: req.body.name,
       email: req.body.email,
-      password: await bcrypt.hash(req.body.password, 12),
+      year: req.body.year
     },
     { new: true }
   );
