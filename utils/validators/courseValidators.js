@@ -23,11 +23,11 @@ exports.getCourseValidator = [
 
 exports.updateCourseValidator = [
   check("id").isMongoId().withMessage("Invalid course id format"),
-  body("name")
+  check("name")
     .optional()
-    .custom((val) =>
+    .custom((val, {req}) =>
       Course.findOne({ name: val }).then((course) => {
-        if (course) {
+        if (course._id != req.params.id) {
           return Promise.reject(new Error("This course already exist"));
         }
       })
