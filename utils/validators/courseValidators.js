@@ -27,7 +27,7 @@ exports.updateCourseValidator = [
     .optional()
     .custom((val, { req }) =>
       Course.findOne({ name: val }).then((course) => {
-        if (course._id != req.params.id) {
+        if (course && course._id != req.params.id) {
           return Promise.reject(new Error("This course already exist"));
         } else return true;
       })
