@@ -40,11 +40,12 @@ exports.updateUserValidator = [
     .optional()
     .isEmail()
     .withMessage("Invalid email address")
-    .custom((val) =>
+    .custom((val, {req}) =>
       User.findOne({ email: val }).then((user) => {
-        if (user) {
+        if (user._id != req.params.id) {
           return Promise.reject(new Error("E-mail already in user"));
         }
+        else return true;
       })
     ),
 
