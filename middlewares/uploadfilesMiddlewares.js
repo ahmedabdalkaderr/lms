@@ -22,8 +22,7 @@ const uploadFile = (field,dir) => {
       cb(null, `uploads/${dir}`);
     },
     filename: function (req, file, cb) {
-      const ext = file.originalname.split(".")[1];
-      const fileName = `${dir}-${uuidv4()}-${Date.now()}.${ext}`;
+      const fileName = `${dir}-${uuidv4()}-${Date.now()}.${file.originalname}`;
       req.body.file = fileName;
       cb(null, fileName);
     },
