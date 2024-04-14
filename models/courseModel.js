@@ -23,6 +23,7 @@ const courseSchema = new Schema(
 const setImage = (doc) => {
   const img = doc.image;
   if (img && !img.startsWith('h')) {
+    console.log(process.env.BASE_URL);
     const imageUrl = `${process.env.BASE_URL}/courses/${img}`;
     doc.image = imageUrl;
   }

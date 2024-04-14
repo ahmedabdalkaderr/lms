@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
-const multer = require("multer");
 
 const {
   uploadSingleImage,

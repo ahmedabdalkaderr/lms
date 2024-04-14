@@ -22,6 +22,7 @@ const materialSchema = new Schema(
 const setFile = (doc) => {
   const file = doc.file;
   if (file && !file.startsWith("h")) {
+    console.log(process.env.BASE_URL);
     const fileUrl = `${process.env.BASE_URL}/materials/${file}`;
     doc.file = fileUrl;
   }
