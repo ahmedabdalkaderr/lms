@@ -25,7 +25,7 @@ router
 router
   .route("/:id")
   .get(getMaterialValidator, getMaterial)
-  .put(updateMaterialValidator, updateMaterial)
+  .put(uploadMaterialFile, updateMaterialValidator, updateMaterial)
   .delete(deleteMaterialValidator, deleteMaterial);
 
 module.exports = router;

@@ -50,6 +50,7 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
 
 exports.updateMaterial = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
+  console.log(req.body);
   const material = await Material.findByIdAndUpdate(id, req.body, {
     new: true,
   });

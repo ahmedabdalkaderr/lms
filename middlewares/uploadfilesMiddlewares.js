@@ -16,7 +16,7 @@ const uploadImage = () => {
   return upload;
 };
 
-const uploadFile = (field,dir) => {
+const uploadFile = (dir) => {
   const multerStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, `uploads/${dir}`);
@@ -34,4 +34,4 @@ const uploadFile = (field,dir) => {
 
 
 exports.uploadSingleImage = (field) => uploadImage().single(field);
-exports.uploadSingleFile = (field,dir) => uploadFile(field,dir).single(field);
+exports.uploadSingleFile = (field,dir) => uploadFile(dir).single(field);

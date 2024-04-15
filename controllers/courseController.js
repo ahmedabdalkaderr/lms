@@ -28,18 +28,14 @@ exports.getCourses = asyncHandler(async (req, res) => {
   let filter = {};
   if (req.filterObj) filter = req.filterObj;
   const apiFeatures = new ApiFeatures(Course.find(filter), req.query);
-  apiFeatures
-    .filter()
-    .sort()
-    .limitFields()
-    .search();
-  const {mongooseQuery} = apiFeatures;
+  apiFeatures.filter().sort().limitFields().search();
+  const { mongooseQuery } = apiFeatures;
 
   const courses = await mongooseQuery;
 
   res.status(200).json({
     results: courses.length,
-    data: {courses},
+    data: { courses },
   });
 });
 
@@ -70,6 +66,7 @@ exports.getCourse = asyncHandler(async (req, res, next) => {
 
 exports.updateCourse = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
+  console.log(req.body);
   const course = await Course.findByIdAndUpdate(id, req.body, { new: true });
 
   if (!course) {
