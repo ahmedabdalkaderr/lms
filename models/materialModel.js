@@ -5,11 +5,12 @@ const materialSchema = new Schema(
   {
     file: {
       type: String,
-      required: [true, "upload your file"],
+      // required: [true, "upload your file"],
     },
     type: {
       type: String,
-      required: [true, "Enter file type"],
+      // required: [true, "Enter file type"],
+      default: "book",
     },
     course: {
       type: mongoose.Schema.ObjectId,

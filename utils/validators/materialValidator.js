@@ -5,7 +5,6 @@ const Course = require("../../models/courseModel");
 
 exports.createMaterialValidator = [
   check("file").notEmpty().withMessage("Please upload your file"),
-  check("type").notEmpty().withMessage("Please file type"),
   validatorMiddleware,
 ];
 
