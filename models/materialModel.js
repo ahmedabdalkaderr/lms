@@ -10,7 +10,6 @@ const materialSchema = new Schema(
     type: {
       type: String,
       // required: [true, "Enter file type"],
-      default: "book",
     },
     course: {
       type: mongoose.Schema.ObjectId,
