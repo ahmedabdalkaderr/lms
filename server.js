@@ -6,13 +6,13 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 
-
 const global = require("./middlewares/middlewaresError");
 const ApiError = require("./utils/apiError");
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
 const courseRoute = require("./routes/courseRoute");
 const materialRoute = require("./routes/materialRoute");
+const typeRoute = require("./routes/typeRoute");
 
 dotenv.config({ path: "config.env" });
 mongoose.connect(process.env.DB_URI).then((con) => {
@@ -36,6 +36,7 @@ app.use("/api/v1/users", userRoute);
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/courses", courseRoute);
 app.use("/api/v1/materials", materialRoute);
+app.use("/api/v1/types", typeRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`This url is not exist: ${req.url}`, 400));

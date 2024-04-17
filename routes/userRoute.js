@@ -6,22 +6,30 @@ const {
   updateUserValidator,
   deleteUserValidator,
 } = require("../utils/validators/userValidators");
-const {
-  isAuthenticated,
-  allowedTo,
-} = require("../middlewares/AuthMiddlewares");
+const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
 
-const userController = require("../controllers/userController");
+const {
+  getUsers,
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
+  getLoggedUser,
+  updateLoggedUser,
+  deleteLoggedUser,
+} = require("../controllers/userController");
 
 // router.use(isAuthenticated, allowedTo("admin"));
+router.get("/getMe", isAuthenticated, getLoggedUser, getUser);
+router.put("/updateMe", isAuthenticated, updateLoggedUser, updateUser);
+router.delete("/deleteMe", isAuthenticated, deleteLoggedUser, deleteUser);
 
-router.get("/", userController.getUsers);
-router.post("/", createUserValidator, userController.createUser);
-
+router.get("/", getUsers);
+router.post("/", createUserValidator, createUser);
 router
   .route("/:id")
-  .get(getUserValidator, userController.getUser)
-  .put(updateUserValidator, userController.updateUser)
-  .delete(deleteUserValidator, userController.deleteUser);
+  .get(getUserValidator, getUser)
+  .put(updateUserValidator, updateUser)
+  .delete(deleteUserValidator, deleteUser);
 
 module.exports = router;

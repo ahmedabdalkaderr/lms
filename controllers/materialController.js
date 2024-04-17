@@ -10,7 +10,6 @@ exports.uploadMaterialFile = uploadSingleFile("file", "materials");
 exports.createMaterial = asyncHandler(async (req, res, next) => {
   if (req.params.courseId) req.body.course = req.params.courseId;
   const material = await Material.create(req.body);
-  res.setHeader("Content-Disposition", "inline");
   res.status(200).json({
     status: "success",
     data: {

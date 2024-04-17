@@ -13,7 +13,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     results: users.length,
-    data: {users},
+    data: { users },
   });
 });
 
@@ -40,7 +40,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const id = req.params.id;
+  const {id} = req.params;
   const user = await User.findById(id);
   if (!user) {
     return next(new ApiError(`No user exist with this id: ${id}`, 404));
@@ -55,12 +55,13 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  console.log(id);
   const user = await User.findByIdAndUpdate(
     id,
     {
       name: req.body.name,
       email: req.body.email,
-      year: req.body.year
+      year: req.body.year,
     },
     { new: true }
   );
@@ -87,4 +88,19 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   res.status(204).json({
     message: "User deleted successfully",
   });
+});
+
+exports.getLoggedUser = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+
+exports.updateLoggedUser = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+
+exports.deleteLoggedUser = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
 });
