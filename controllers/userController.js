@@ -1,9 +1,26 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
-const User = require("../models/userModel");
+const sharp = require("sharp");
+const { v4: uuidv4 } = require("uuid");
 
 const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
+const { uploadSingleImage } = require("../middlewares/uploadfilesMiddlewares");
+const User = require("../models/userModel");
+
+exports.uploadUserImage = uploadSingleImage("photo");
+exports.resizeImage = asyncHandler(async (req, res, next) => {
+  if (req.file) {
+    const imageName = `user-${uuidv4()}-${Date.now()}.jpeg`;
+    await sharp(req.file.buffer)
+      .resize(2000, 1333)
+      .toFormat("jpeg")
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/users/${imageName}`);
+    req.body.photo = imageName;
+  }
+  next();
+});
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const apiFeatures = new ApiFeatures(User.find(), req.query);
@@ -62,6 +79,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
       year: req.body.year,
+      photo: req.body.photo,
     },
     { new: true }
   );

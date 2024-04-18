@@ -9,6 +9,8 @@ const {
 const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
 
 const {
+  uploadUserImage,
+  resizeImage,
   getUsers,
   createUser,
   getUser,
@@ -20,16 +22,29 @@ const {
 } = require("../controllers/userController");
 
 // router.use(isAuthenticated, allowedTo("admin"));
-router.get("/getMe", isAuthenticated, getLoggedUser, getUser);
-router.put("/updateMe", isAuthenticated, updateLoggedUser, updateUser);
-router.delete("/deleteMe", isAuthenticated, deleteLoggedUser, deleteUser);
-
+router
+  .route("/me")
+  .get(isAuthenticated, getLoggedUser, getUser)
+  .put(
+    uploadUserImage,
+    resizeImage,
+    isAuthenticated,
+    updateLoggedUser,
+    updateUser
+  )
+  .delete(isAuthenticated, deleteLoggedUser, deleteUser);
 router.get("/", getUsers);
-router.post("/", createUserValidator, createUser);
+router.post(
+  "/",
+  uploadUserImage,
+  resizeImage,
+  createUserValidator,
+  createUser
+);
 router
   .route("/:id")
   .get(getUserValidator, getUser)
-  .put(updateUserValidator, updateUser)
+  .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
   .delete(deleteUserValidator, deleteUser);
 
 module.exports = router;

@@ -8,10 +8,11 @@ const typeSchema = new Schema(
       // required: [true, "Enter file type"],
     },
     materials: [
-        {
-          file: String,
-        }
-      ],
+      {
+        file: String,
+        id: String,
+      },
+    ],
   },
   { timestamps: true }
 );

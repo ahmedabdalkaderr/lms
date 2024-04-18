@@ -15,10 +15,8 @@ exports.createMaterial = asyncHandler(async (req, res, next) => {
   if (!type) return next(new ApiError("No title exist with this type", 404));
 
   const material = await Material.create(req.body);
-  type.materials.push({file:material.file});
+  type.materials.push({ file: material.file, id: material._id });
   await type.save();
-  
-  console.log(type);
   res.status(200).json({
     status: "success",
     data: {
@@ -59,11 +57,22 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
 
 exports.updateMaterial = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  console.log(req.body);
-  const material = await Material.findByIdAndUpdate(id, req.body, {
-    new: true,
+  const material = await Material.findByIdAndUpdate(
+    id,
+    { file: req.body.file },
+    {
+      new: true,
+    }
+  );
+  const type = await Type.findOne({ type: material.type });
+  const newMaterials = [];
+  type.materials.forEach((el) => {
+    if (el.id === id) {
+      newMaterials.push({ file: material.file, id: material._id });
+    } else newMaterials.push(el);
   });
-
+  type.materials = newMaterials;
+  await type.save();
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
   }
@@ -83,6 +92,16 @@ exports.deleteMaterial = asyncHandler(async (req, res, next) => {
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
   }
+  const type = await Type.findOne({ type: material.type });
+
+  const newMaterials = [];
+  type.materials.forEach((el) => {
+    if (el.id === id) {
+      console.log(true);
+    } else newMaterials.push(el);
+  });
+  type.materials = newMaterials;
+  await type.save();
   res.status(204).json({
     status: "success",
   });

@@ -24,8 +24,19 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    photo: String,
   },
   { timestamps: true }
 );
+
+const setImage = (doc) => {
+  const img = doc.photo;
+  if (img && !img.startsWith("h")) {
+    const photoUrl = `${process.env.BASE_URL}/users/${img}`;
+    doc.photo = photoUrl;
+  }
+};
+
+userSchema.post(["init", "save"], setImage);
 
 module.exports = mongoose.model("User", userSchema);
