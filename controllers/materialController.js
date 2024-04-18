@@ -4,12 +4,21 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 const { uploadSingleFile } = require("../middlewares/uploadfilesMiddlewares");
 const Material = require("../models/materialModel");
+const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
   if (req.params.courseId) req.body.course = req.params.courseId;
+  const target = req.body.type;
+  const type = await Type.findOne({ type: target });
+  if (!type) return next(new ApiError("No title exist with this type", 404));
+
   const material = await Material.create(req.body);
+  type.materials.push(material._id);
+  await type.save();
+  
+  console.log(type);
   res.status(200).json({
     status: "success",
     data: {
@@ -31,7 +40,7 @@ exports.getMaterials = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     results: materials.length,
-    data: {materials},
+    data: { materials },
   });
 });
 

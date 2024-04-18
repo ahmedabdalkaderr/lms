@@ -18,6 +18,10 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
 });
 
 exports.createType = asyncHandler(async (req, res, next) => {
+  const check = await Type.findOne(req.body);
+  if (check)
+    return next(new ApiError(`This title already exist`, 404));
+
   const type = await Type.create(req.body);
   res.status(200).json({
     status: "success",
@@ -32,12 +36,8 @@ exports.getType = asyncHandler(async (req, res, next) => {
   const type = await Type.findById(id);
 
   if (!type) {
-    return next(new ApiError(`No type exist with this id: ${id}`, 404));
+    return next(new ApiError(`No title exist with this id: ${id}`, 404));
   }
-  const target = type.type;
-  const materials = await Material.find({ type: target }).select('_id');
-  type.materials = materials;
-  type.save();
   res.status(200).json({
     status: "success",
     data: {
@@ -51,7 +51,7 @@ exports.updateType = asyncHandler(async (req, res, next) => {
   const type = await Type.findByIdAndUpdate(id, req.body, { new: true });
 
   if (!type) {
-    return next(new ApiError(`No type exist with this id: ${id}`, 404));
+    return next(new ApiError(`No title exist with this id: ${id}`, 404));
   }
 
   return res.status(200).json({
@@ -67,7 +67,7 @@ exports.deleteType = asyncHandler(async (req, res, next) => {
 
   const type = await Type.findByIdAndDelete(id);
   if (!type) {
-    return next(new ApiError(`No type exist with this id: ${id}`, 404));
+    return next(new ApiError(`No title exist with this id: ${id}`, 404));
   }
   res.status(204).json({
     status: "success",

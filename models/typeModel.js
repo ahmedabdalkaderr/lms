@@ -7,10 +7,7 @@ const typeSchema = new Schema(
       type: String,
       // required: [true, "Enter file type"],
     },
-    materials: {
-      type: [mongoose.Schema.ObjectId],
-      ref: "Material",
-    },
+    materials: [String]
   },
   { timestamps: true }
 );
