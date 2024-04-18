@@ -24,16 +24,16 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    photo: String,
+    image: String,
   },
   { timestamps: true }
 );
 
 const setImage = (doc) => {
-  const img = doc.photo;
+  const img = doc.image;
   if (img && !img.startsWith("h")) {
-    const photoUrl = `${process.env.BASE_URL}/users/${img}`;
-    doc.photo = photoUrl;
+    const imageUrl = `${process.env.BASE_URL}/users/${img}`;
+    doc.image = imageUrl;
   }
 };
 

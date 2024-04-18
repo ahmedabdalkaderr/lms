@@ -8,7 +8,7 @@ const ApiError = require("../utils/apiError");
 const { uploadSingleImage } = require("../middlewares/uploadfilesMiddlewares");
 const User = require("../models/userModel");
 
-exports.uploadUserImage = uploadSingleImage("photo");
+exports.uploadUserImage = uploadSingleImage("image");
 exports.resizeImage = asyncHandler(async (req, res, next) => {
   if (req.file) {
     const imageName = `user-${uuidv4()}-${Date.now()}.jpeg`;
@@ -17,7 +17,7 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
       .toFormat("jpeg")
       .jpeg({ quality: 90 })
       .toFile(`uploads/users/${imageName}`);
-    req.body.photo = imageName;
+    req.body.image = imageName;
   }
   next();
 });
@@ -72,14 +72,15 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
+  console.log(req.body.image);
+
   const user = await User.findByIdAndUpdate(
     id,
     {
       name: req.body.name,
       email: req.body.email,
       year: req.body.year,
-      photo: req.body.photo,
+      image: req.body.image,
     },
     { new: true }
   );
