@@ -15,7 +15,7 @@ exports.createMaterial = asyncHandler(async (req, res, next) => {
   if (!type) return next(new ApiError("No title exist with this type", 404));
 
   const material = await Material.create(req.body);
-  type.materials.push(material._id);
+  type.materials.push({file:material.file});
   await type.save();
   
   console.log(type);

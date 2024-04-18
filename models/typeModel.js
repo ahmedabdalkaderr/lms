@@ -7,11 +7,13 @@ const typeSchema = new Schema(
       type: String,
       // required: [true, "Enter file type"],
     },
-    materials: [String]
+    materials: [
+        {
+          file: String,
+        }
+      ],
   },
   { timestamps: true }
 );
-
-
 
 module.exports = mongoose.model("Type", typeSchema);
