@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require("uuid");
 
 const {
   uploadSingleImage,
-  uploadSingleFile,
 } = require("../middlewares/uploadfilesMiddlewares");
 const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");

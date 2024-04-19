@@ -20,8 +20,7 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
 
 exports.createType = asyncHandler(async (req, res, next) => {
   const check = await Type.findOne(req.body);
-  if (check)
-    return next(new ApiError(`This title already exist`, 404));
+  if (check) return next(new ApiError(`This title already exist`, 404));
 
   const type = await Type.create(req.body);
   res.status(200).json({
@@ -50,10 +49,17 @@ exports.getType = asyncHandler(async (req, res, next) => {
 exports.updateType = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const type = await Type.findByIdAndUpdate(id, req.body, { new: true });
-
   if (!type) {
     return next(new ApiError(`No title exist with this id: ${id}`, 404));
   }
+  const target = type.type;
+  type.materials.forEach(async function (el) {
+    const material = await Material.findByIdAndUpdate(
+      el.id,
+      { type: target },
+      { new: true }
+    );
+  });
 
   return res.status(200).json({
     status: "success",
