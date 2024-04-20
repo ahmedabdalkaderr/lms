@@ -11,6 +11,7 @@ const typeSchema = new Schema(
       {
         file: String,
         id: String,
+        name: String,
       },
     ],
     course: {

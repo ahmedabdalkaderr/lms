@@ -25,6 +25,7 @@ const uploadFile = (dir) => {
       const ext = file.originalname.split(".")[1];
       const fileName = `${dir}-${uuidv4()}-${Date.now()}.${ext}`;
       req.body.file = fileName;
+      req.body.name = file.originalname;
       cb(null, fileName);
     },
   });
