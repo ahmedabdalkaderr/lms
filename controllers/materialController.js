@@ -91,7 +91,7 @@ exports.deleteMaterial = asyncHandler(async (req, res, next) => {
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
   }
-  const type = await Type.findOne({ type: material.type });
+  const type = await Type.findOne({ type: material.type, course:material.course });
 
   const newMaterials = [];
   type.materials.forEach((el) => {

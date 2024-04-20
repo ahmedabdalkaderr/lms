@@ -75,7 +75,7 @@ exports.deleteType = asyncHandler(async (req, res, next) => {
   if (!type) {
     return next(new ApiError(`No title exist with this id: ${id}`, 404));
   }
-  console.log(type);
+
   type.materials.forEach(async function (el) {
     const material = await Material.findByIdAndDelete(el.id);
     // await material.save();
