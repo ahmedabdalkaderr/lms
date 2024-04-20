@@ -13,6 +13,10 @@ const typeSchema = new Schema(
         id: String,
       },
     ],
+    course: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Course",
+    },
   },
   { timestamps: true }
 );
