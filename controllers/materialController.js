@@ -9,9 +9,8 @@ const Type = require("../models/typeModel");
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
-  if (req.params.courseId) req.body.course = req.params.courseId;
-  const target = req.body.type;
-  const type = await Type.findOne({ type: target });
+  if(!req.body.course) return next(new ApiError("Please add course id", 404));
+  const type = await Type.findOne({type:req.body.type, course:req.body.course});
   if (!type) return next(new ApiError("No title exist with this type", 404));
 
   const material = await Material.create(req.body);
