@@ -63,7 +63,7 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
       new: true,
     }
   );
-  const type = await Type.findOne({ type: material.type });
+  const type = await Type.findOne({ type: material.type, course: material.course });
   const newMaterials = [];
   type.materials.forEach((el) => {
     if (el.id === id) {
