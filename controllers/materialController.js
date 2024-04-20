@@ -77,7 +77,7 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
   const newMaterials = [];
   type.materials.forEach((el) => {
     if (el.id === id) {
-      newMaterials.push({ file: material.file, id: material._id });
+      newMaterials.push({ file: material.file, id: material._id, name:req.body.name });
     } else newMaterials.push(el);
   });
   type.materials = newMaterials;
