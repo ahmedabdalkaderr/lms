@@ -10,7 +10,7 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   apiFeatures.filter().sort().limitFields().search();
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
-
+  types.reverse();
   res.status(200).json({
     results: types.length,
     data: { types },
