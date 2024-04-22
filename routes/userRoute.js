@@ -22,17 +22,17 @@ const {
 } = require("../controllers/userController");
 
 // router.use(isAuthenticated, allowedTo("admin"));
+router.use(isAuthenticated)
 router
   .route("/me")
-  .get(isAuthenticated, getLoggedUser, getUser)
+  .get(getLoggedUser, getUser)
   .put(
     uploadUserImage,
     resizeImage,
-    isAuthenticated,
     updateLoggedUser,
     updateUser
   )
-  .delete(isAuthenticated, deleteLoggedUser, deleteUser);
+  .delete( deleteLoggedUser, deleteUser);
 router.get("/", getUsers);
 router.post(
   "/",

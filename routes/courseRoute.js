@@ -17,8 +17,10 @@ const {
   uploadCourseImage,
   resizeImage,
 } = require("../controllers/courseController");
+const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
 
 router.use("/:courseId/materials", materialRoute);
+router.use(isAuthenticated);
 
 router
   .route("/")

@@ -15,6 +15,9 @@ const {
   updateMaterial,
   deleteMaterial,
 } = require("../controllers/materialController");
+const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
+
+router.use(isAuthenticated);
 
 router
   .route("/")
