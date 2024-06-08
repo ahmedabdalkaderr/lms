@@ -18,10 +18,13 @@ const userSchema = new Schema(
       type: String,
       // required: [true, "password must be included"],
     },
-    year: String,
+    year: {
+      type: String,
+      default: "general",
+    },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "instructor"],
       default: "user",
     },
     image: String,

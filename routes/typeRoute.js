@@ -1,4 +1,8 @@
 const router = require("express").Router();
+
+ const {createTypeValidator, getTypeValidator, updateMaterialValidator, deleteMaterialValidator}
+  = require("../utils/validators/typeValidators");
+
 const {
   getTypes,
   createType,
@@ -6,11 +10,21 @@ const {
   updateType,
   deleteType,
 } = require("../controllers/typeController");
-const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
+const {
+  isAuthenticated,
+  allowedTo,
+} = require("../middlewares/AuthMiddlewares");
 
 router.use(isAuthenticated);
-router.route("/").get(getTypes).post(createType);
+router
+  .route("/")
+  .get(getTypes)
+  .post(allowedTo("admin", "instructor"), createTypeValidator, createType);
 
-router.route("/:id").get(getType).put(updateType).delete(deleteType);
+router
+  .route("/:id")
+  .get(getTypeValidator, getType)
+  .put(allowedTo("admin", "instructor"), updateMaterialValidator, updateType)
+  .delete(allowedTo("admin", "instructor"), deleteMaterialValidator, deleteType);
 
 module.exports = router;

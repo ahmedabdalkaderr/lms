@@ -15,20 +15,36 @@ const {
   updateMaterial,
   deleteMaterial,
 } = require("../controllers/materialController");
-const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
+const {
+  isAuthenticated,
+  allowedTo,
+} = require("../middlewares/AuthMiddlewares");
 
 router.use(isAuthenticated);
 
 router
   .route("/")
   .get(getMaterials)
-  .post(uploadMaterialFile, createMaterialValidator, createMaterial);
-
+  .post(
+    allowedTo("admin", "instructor"),
+    uploadMaterialFile,
+    createMaterialValidator,
+    createMaterial
+  );
 
 router
   .route("/:id")
   .get(getMaterialValidator, getMaterial)
-  .put(uploadMaterialFile, updateMaterialValidator, updateMaterial)
-  .delete(deleteMaterialValidator, deleteMaterial);
+  .put(
+    allowedTo("admin", "instructor"),
+    uploadMaterialFile,
+    updateMaterialValidator,
+    updateMaterial
+  )
+  .delete(
+    allowedTo("admin", "instructor"),
+    deleteMaterialValidator,
+    deleteMaterial
+  );
 
 module.exports = router;

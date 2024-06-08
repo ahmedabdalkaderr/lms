@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const materialRoute = require('./materialRoute');
+const materialRoute = require("./materialRoute");
 const {
   createCourseValidator,
   getCourseValidator,
@@ -17,7 +17,7 @@ const {
   uploadCourseImage,
   resizeImage,
 } = require("../controllers/courseController");
-const { isAuthenticated } = require("../middlewares/AuthMiddlewares");
+const { isAuthenticated, allowedTo } = require("../middlewares/AuthMiddlewares");
 
 router.use("/:courseId/materials", materialRoute);
 router.use(isAuthenticated);
@@ -25,12 +25,28 @@ router.use(isAuthenticated);
 router
   .route("/")
   .get(getCourses)
-  .post(uploadCourseImage, resizeImage, createCourseValidator, createCourse);
+  .post(
+    allowedTo("admin"),
+    uploadCourseImage,
+    resizeImage,
+    createCourseValidator,
+    createCourse
+  );
 
 router
   .route("/:id")
   .get(getCourseValidator, getCourse)
-  .put(uploadCourseImage, resizeImage, updateCourseValidator, updateCourse)
-  .delete(deleteCourseValidator, deleteCourse);
+  .put(
+    allowedTo("admin"),
+    uploadCourseImage,
+    resizeImage,
+    updateCourseValidator,
+    updateCourse
+  )
+  .delete(
+    allowedTo("admin"),
+    deleteCourseValidator,
+    deleteCourse
+  );
 
 module.exports = router;
