@@ -6,7 +6,10 @@ const {
   updateUserValidator,
   deleteUserValidator,
 } = require("../utils/validators/userValidators");
-const { isAuthenticated, allowedTo } = require("../middlewares/AuthMiddlewares");
+const {
+  isAuthenticated,
+  allowedTo,
+} = require("../middlewares/AuthMiddlewares");
 
 const {
   uploadUserImage,
@@ -22,6 +25,7 @@ const {
 } = require("../controllers/userController");
 
 // router.use(isAuthenticated, allowedTo("admin"));
+
 router.use(isAuthenticated);
 router
   .route("/me")
@@ -29,13 +33,26 @@ router
   .put(uploadUserImage, resizeImage, updateLoggedUser, updateUser)
   .delete(deleteLoggedUser, deleteUser);
 
-router.use(allowedTo("admin"));
-router.get("/", getUsers);
-router.post("/", uploadUserImage, resizeImage, createUserValidator, createUser);
+router.get("/", allowedTo("admin", "instructor"), getUsers);
+router.post(
+  "/",
+  allowedTo("admin"),
+  uploadUserImage,
+  resizeImage,
+  createUserValidator,
+  createUser
+);
+
 router
   .route("/:id")
-  .get(getUserValidator, getUser)
-  .put(uploadUserImage, resizeImage, updateUserValidator, updateUser)
-  .delete(deleteUserValidator, deleteUser);
+  .get(allowedTo("admin", "instructor"), getUserValidator, getUser)
+  .put(
+    allowedTo("admin"),
+    uploadUserImage,
+    resizeImage,
+    updateUserValidator,
+    updateUser
+  )
+  .delete(allowedTo("admin"), deleteUserValidator, deleteUser);
 
 module.exports = router;

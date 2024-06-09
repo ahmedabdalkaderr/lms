@@ -38,7 +38,7 @@ class APIFeatures {
   search(modelName = "") {
     if (this.query.keyword) {
       const qr = {};
-        qr.$or = [{ name: { $regex: this.query.keyword, $options: "i" } }];
+      qr.$or = [{ name: { $regex: this.query.keyword, $options: "i" } }];
       this.mongooseQuery = this.mongooseQuery.find(qr);
     }
 
