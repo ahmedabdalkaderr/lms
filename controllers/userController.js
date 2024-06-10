@@ -57,7 +57,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const user = await User.findById(id);
   if (!user) {
     return next(new ApiError(`No user exist with this id: ${id}`, 404));
@@ -81,6 +81,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
       email: req.body.email,
       year: req.body.year,
       image: req.body.image,
+      number: req.body.number,
     },
     { new: true }
   );
