@@ -1,6 +1,10 @@
+const User = require("../models/userModel");
 class APIFeatures {
   constructor(mongooseQuery, query) {
+    console.log(User===mongooseQuery)
     this.mongooseQuery = mongooseQuery;
+        console.log(User === this.mongooseQuery);
+
     this.query = query;
   }
 
@@ -35,11 +39,11 @@ class APIFeatures {
     return this;
   }
 
-  search(modelName = "") {
+  search(modelName="") {
     if (this.query.keyword) {
-      const qr = {};
-      qr.$or = [{ name: { $regex: this.query.keyword, $options: "i" } }];
-      this.mongooseQuery = this.mongooseQuery.find(qr);
+      this.mongooseQuery = modelName.find({
+        name: { $regex: "x", $options: "i" },
+      });
     }
 
     return this;

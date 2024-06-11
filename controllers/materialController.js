@@ -7,13 +7,17 @@ const Material = require("../models/materialModel");
 const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
-const checkMaterialType = (req,res,next) => {
-  if (req.body.type != "Task" && req.user.role === "user") return true;
+const checkMaterialType = (type, role) => {
+  if (type !== "Task" && role === "user") return true;
   else return false;
 };
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
-  if (checkMaterialType(req,res,next))
+  if (req.body.type[0] === "t") {
+    req.body.type[0] = "T";
+  }
+
+  if (checkMaterialType(req.body.type, req.user.role))
     return next(new ApiError("You are not allowed to access this route"));
 
   const type = await Type.findOne({
@@ -55,13 +59,12 @@ exports.getMaterials = asyncHandler(async (req, res, next) => {
 });
 
 exports.getMaterial = asyncHandler(async (req, res, next) => {
-  if (checkMaterialType())
-    return next(new ApiError("You are not allowed to access this route"));
-
   const material = await Material.findById(req.params.id);
   if (!material) {
     return next(new ApiError("No material exist with this id", 404));
   }
+  if (checkMaterialType(material.type, req.user.role))
+    return next(new ApiError("You are not allowed to access this route"));
   res.status(200).json({
     status: "success",
     data: {
@@ -71,9 +74,6 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateMaterial = asyncHandler(async (req, res, next) => {
-  if (checkMaterialType())
-    return next(new ApiError("You are not allowed to access this route"));
-
   const id = req.params.id;
   const material = await Material.findByIdAndUpdate(
     id,
@@ -82,6 +82,12 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
       new: true,
     }
   );
+  if (!material)
+    return next(new ApiError("No material exist with this id", 404));
+
+  if (checkMaterialType(material.type, req.user.role))
+    return next(new ApiError("You are not allowed to access this route"));
+
   const type = await Type.findOne({
     type: material.type,
     course: material.course,
@@ -111,15 +117,14 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteMaterial = asyncHandler(async (req, res, next) => {
-  if (checkMaterialType())
-    return next(new ApiError("You are not allowed to access this route"));
-
   const id = req.params.id;
 
   const material = await Material.findByIdAndDelete(id);
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
   }
+  if (checkMaterialType(material.type, req.user.role))
+    return next(new ApiError("You are not allowed to access this route"));
   const type = await Type.findOne({
     type: material.type,
     course: material.course,
