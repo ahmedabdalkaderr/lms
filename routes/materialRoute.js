@@ -20,9 +20,6 @@ const {
   allowedTo,
 } = require("../middlewares/AuthMiddlewares");
 
-const multer = require("multer");
-const getFields = multer();
-
 router.use(isAuthenticated);
 
 router
@@ -43,7 +40,6 @@ router
     updateMaterial
   )
   .delete(
-    allowedTo("admin", "instructor"),
     deleteMaterialValidator,
     deleteMaterial
   );
