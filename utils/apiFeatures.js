@@ -1,9 +1,7 @@
 const User = require("../models/userModel");
 class APIFeatures {
   constructor(mongooseQuery, query) {
-    console.log(User===mongooseQuery)
     this.mongooseQuery = mongooseQuery;
-        console.log(User === this.mongooseQuery);
 
     this.query = query;
   }

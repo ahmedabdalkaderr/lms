@@ -18,6 +18,10 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
 });
 
 exports.createType = asyncHandler(async (req, res, next) => {
+    if (req.body.type === "task") {
+      req.body.type = "Task";
+    }
+  
   const check = await Type.findOne(req.body);
   if (check) return next(new ApiError(`This title already exist`, 404));
 

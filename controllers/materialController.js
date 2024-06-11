@@ -7,17 +7,10 @@ const Material = require("../models/materialModel");
 const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
-const checkMaterialType = (type, role) => {
-  if (type !== "Task" && role === "user") return true;
-  else return false;
-};
+const checkMaterialType = (type) => (type !== "Task")
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
-  if (req.body.type[0] === "t") {
-    req.body.type[0] = "T";
-  }
-
-  if (checkMaterialType(req.body.type, req.user.role))
+  if (req.user.role === 'user' && checkMaterialType(req.body.type))
     return next(new ApiError("You are not allowed to access this route"));
 
   const type = await Type.findOne({
@@ -63,7 +56,7 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
   if (!material) {
     return next(new ApiError("No material exist with this id", 404));
   }
-  if (checkMaterialType(material.type, req.user.role))
+  if (req.user.role === "user" && checkMaterialType(material.type))
     return next(new ApiError("You are not allowed to access this route"));
   res.status(200).json({
     status: "success",
@@ -85,7 +78,7 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
   if (!material)
     return next(new ApiError("No material exist with this id", 404));
 
-  if (checkMaterialType(material.type, req.user.role))
+  if (req.user.role === "user" && checkMaterialType(material.type))
     return next(new ApiError("You are not allowed to access this route"));
 
   const type = await Type.findOne({
@@ -123,7 +116,7 @@ exports.deleteMaterial = asyncHandler(async (req, res, next) => {
   if (!material) {
     return next(new ApiError(`No material exist with this id: ${id}`, 404));
   }
-  if (checkMaterialType(material.type, req.user.role))
+  if (req.user.role === "user" && checkMaterialType(material.type))
     return next(new ApiError("You are not allowed to access this route"));
   const type = await Type.findOne({
     type: material.type,

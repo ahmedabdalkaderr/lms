@@ -16,6 +16,7 @@ const uploadImage = () => {
 };
 
 const uploadFile = (dir) => {
+
   const multerStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, `uploads/${dir}`);
