@@ -1,8 +1,11 @@
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
+
 const apiError = require("../utils/apiError");
 const User = require("../models/userModel");
+
+
 
 exports.isAuthenticated = asyncHandler(async (req, res, next) => {
   const authHeader = req.get("Authorization");
@@ -32,7 +35,7 @@ exports.isAuthenticated = asyncHandler(async (req, res, next) => {
 });
 
 exports.allowedTo = (...roles) =>
-  asyncHandler(async (req, res, next) => {
+  asyncHandler( async (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
         new apiError("you are not allowed to access this route", 403)

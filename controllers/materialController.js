@@ -7,8 +7,15 @@ const Material = require("../models/materialModel");
 const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
+const checkMaterialType = function () {
+  if (req.body.type != "Task" && req.user.role === "user") return true;
+  else return false;
+};
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
+  if (checkMaterialType())
+    return next(new ApiError("You are not allowed to access this route"));
+
   const type = await Type.findOne({
     type: req.body.type,
     course: req.body.course,
@@ -48,6 +55,9 @@ exports.getMaterials = asyncHandler(async (req, res, next) => {
 });
 
 exports.getMaterial = asyncHandler(async (req, res, next) => {
+  if (checkMaterialType())
+    return next(new ApiError("You are not allowed to access this route"));
+
   const material = await Material.findById(req.params.id);
   if (!material) {
     return next(new ApiError("No material exist with this id", 404));
@@ -61,6 +71,9 @@ exports.getMaterial = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateMaterial = asyncHandler(async (req, res, next) => {
+  if (checkMaterialType())
+    return next(new ApiError("You are not allowed to access this route"));
+
   const id = req.params.id;
   const material = await Material.findByIdAndUpdate(
     id,
@@ -76,7 +89,11 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
   const newMaterials = [];
   type.materials.forEach((el) => {
     if (el.id === id) {
-      newMaterials.push({ file: material.file, id: material._id, name:req.body.name });
+      newMaterials.push({
+        file: material.file,
+        id: material._id,
+        name: req.body.name,
+      });
     } else newMaterials.push(el);
   });
   type.materials = newMaterials;
@@ -94,6 +111,9 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteMaterial = asyncHandler(async (req, res, next) => {
+  if (checkMaterialType())
+    return next(new ApiError("You are not allowed to access this route"));
+
   const id = req.params.id;
 
   const material = await Material.findByIdAndDelete(id);
@@ -108,7 +128,6 @@ exports.deleteMaterial = asyncHandler(async (req, res, next) => {
   const newMaterials = [];
   type.materials.forEach((el) => {
     if (el.id === id) {
-      console.log(true);
     } else newMaterials.push(el);
   });
   type.materials = newMaterials;

@@ -20,12 +20,14 @@ mongoose.connect(process.env.DB_URI).then((con) => {
 });
 
 const app = express();
-
+// ...
 const PORT = process.env.PORT;
 
 app.use(cors());
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
+
 // Middlewares
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

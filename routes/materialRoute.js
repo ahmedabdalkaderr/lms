@@ -20,13 +20,15 @@ const {
   allowedTo,
 } = require("../middlewares/AuthMiddlewares");
 
+const multer = require("multer");
+const getFields = multer();
+
 router.use(isAuthenticated);
 
 router
   .route("/")
   .get(getMaterials)
   .post(
-    allowedTo("admin", "instructor"),
     uploadMaterialFile,
     createMaterialValidator,
     createMaterial
@@ -36,7 +38,6 @@ router
   .route("/:id")
   .get(getMaterialValidator, getMaterial)
   .put(
-    allowedTo("admin", "instructor"),
     uploadMaterialFile,
     updateMaterialValidator,
     updateMaterial

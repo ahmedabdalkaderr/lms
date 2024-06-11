@@ -1,6 +1,5 @@
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-
 const ApiError = require("../utils/apiError");
 
 const uploadImage = () => {
@@ -30,9 +29,9 @@ const uploadFile = (dir) => {
     },
   });
   const upload = multer({ storage: multerStorage });
+
   return upload;
 };
 
-
 exports.uploadSingleImage = (field) => uploadImage().single(field);
-exports.uploadSingleFile = (field,dir) => uploadFile(dir).single(field);
+exports.uploadSingleFile = (field, dir) => uploadFile(dir).single(field);
