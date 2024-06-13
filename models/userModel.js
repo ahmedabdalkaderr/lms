@@ -18,6 +18,9 @@ const userSchema = new Schema(
       type: String,
       // required: [true, "password must be included"],
     },
+    passwordConfirmation: {
+      type : String,
+    },
     year: {
       type: String,
       default: "general",

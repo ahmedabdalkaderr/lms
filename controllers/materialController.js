@@ -7,12 +7,11 @@ const Material = require("../models/materialModel");
 const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
-const checkMaterialType = (type) => (type !== "Task")
+const checkMaterialType = (type) => type !== "Task";
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
-  if (req.user.role === 'user' && checkMaterialType(req.body.type))
+  if (req.user.role === "user" && checkMaterialType(req.body.type))
     return next(new ApiError("You are not allowed to access this route"));
-
   const type = await Type.findOne({
     type: req.body.type,
     course: req.body.course,
@@ -24,6 +23,7 @@ exports.createMaterial = asyncHandler(async (req, res, next) => {
     file: material.file,
     id: material._id,
     name: req.body.name,
+    user: req.user._id,
   });
   await type.save();
   res.status(200).json({

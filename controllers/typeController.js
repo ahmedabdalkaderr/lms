@@ -6,22 +6,34 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 
 exports.getTypes = asyncHandler(async (req, res, next) => {
-  const apiFeatures = new ApiFeatures(Type.find(), req.query);
+  const apiFeatures = new ApiFeatures(Type, req.query);
   apiFeatures.filter().sort().limitFields().search();
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
   types.reverse();
-  res.status(200).json({
+  if (req.user.role === 'user' && req.query.type.includes("Task")) {
+    const x = [];
+    types[0].materials.forEach((material) => {
+      if (material.user === req.user._id.toString()) {
+        x.push(material);
+        return;
+      }
+    });
+    types[0].materials = x;
+  }
+
+
+ res.status(200).json({
     results: types.length,
     data: { types },
   });
 });
 
 exports.createType = asyncHandler(async (req, res, next) => {
-    if (req.body.type === "task") {
-      req.body.type = "Task";
-    }
-  
+  if (req.body.type === "task") {
+    req.body.type = "Task";
+  }
+
   const check = await Type.findOne(req.body);
   if (check) return next(new ApiError(`This title already exist`, 404));
 

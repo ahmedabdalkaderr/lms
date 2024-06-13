@@ -7,7 +7,6 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 const { uploadSingleImage } = require("../middlewares/uploadfilesMiddlewares");
 const User = require("../models/userModel");
-const { mongo } = require("mongoose");
 
 exports.uploadUserImage = uploadSingleImage("image");
 exports.resizeImage = asyncHandler(async (req, res, next) => {
@@ -73,7 +72,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.body.image);
 
   const user = await User.findByIdAndUpdate(
     id,
@@ -98,6 +96,12 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+// exports.updateUserPassword = asyncHandler(async (req, res, next) => {
+//      const { id } = req.params;
+
+//      const user = 
+// });
 
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id;

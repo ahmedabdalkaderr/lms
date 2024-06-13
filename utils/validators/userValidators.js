@@ -53,6 +53,30 @@ exports.updateUserValidator = [
   validatorMiddleware,
 ];
 
+exports.changeUserPasswordValidation = [
+  check("id").isMongoId().withMessage("Invalid User id format"),
+  body("password").notEmpty().withMessage("enter current password"),
+  body("passwordConfirm").notEmpty().withMessage("confirm a new password"),
+
+  body("password")
+    .notEmpty()
+    .withMessage("enter a new password")
+    .custom(async (password, { req }) => {
+      const user = await User.findById(req.params.id);
+      if (!user) throw new Error("no user for this id");
+      const isCorrectPassword = await bcrypt.compare(
+        req.body.currentPassword,
+        user.password
+      );
+      if (!isCorrectPassword)
+        throw new Error("no user found with this password");
+      if (password !== req.body.passwordConfirm)
+        throw new Error("password confirmation incorrect");
+      return true;
+    }),
+  validatorMiddleware,
+];
+
 exports.deleteUserValidator = [
   check("id").isMongoId().withMessage("Invalid User id format"),
   validatorMiddleware,
