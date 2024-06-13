@@ -7,6 +7,7 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 const { uploadSingleImage } = require("../middlewares/uploadfilesMiddlewares");
 const User = require("../models/userModel");
+const { mongo } = require("mongoose");
 
 exports.uploadUserImage = uploadSingleImage("image");
 exports.resizeImage = asyncHandler(async (req, res, next) => {

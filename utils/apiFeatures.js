@@ -40,7 +40,7 @@ class APIFeatures {
   search(modelName="") {
     if (this.query.keyword) {
       this.mongooseQuery = modelName.find({
-        name: { $regex: "x", $options: "i" },
+        name: { $regex: this.query.keyword, $options: "i" },
       });
     }
 
