@@ -8,7 +8,7 @@ const ApiError = require("../utils/apiError");
 exports.getTypes = asyncHandler(async (req, res, next) => {
     const qr = req.query.type;
     let filter = {};
-    if(qr && qr.ne && qr.ne === 'Task'){
+    if(qr && qr.ne){
       filter = {type:{$not:/^task/i}};
     }
   const apiFeatures = new ApiFeatures(Type.find(filter), req.query);
@@ -17,7 +17,7 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   const types = await mongooseQuery;
   types.reverse();
 
-    if (req.user.role === "user" && qr && qr.includes("Task")) {
+    if (req.user.role === "user" && qr && !qr.ne & qr.includes("Task")) {
       const x = [];
       types[0].materials.forEach((material) => {
         if (material.user === req.user._id.toString()) {
