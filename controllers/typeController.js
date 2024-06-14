@@ -6,36 +6,37 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 
 exports.getTypes = asyncHandler(async (req, res, next) => {
-  const apiFeatures = new ApiFeatures(Type, req.query);
-  apiFeatures.filter().sort().limitFields().search();
+    const qr = req.query.type;
+    let filter = {};
+    if(qr && qr.ne && qr.ne === 'Task'){
+      filter = {type:{$not:/^task/i}};
+    }
+  const apiFeatures = new ApiFeatures(Type.find(filter), req.query);
+  apiFeatures.filter().sort().limitFields().search("Type");
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
   types.reverse();
-  const qr = req.query.type;
-  if (req.user.role === 'user' && qr && !qr.ne && qr.includes("Task")) {
-    const x = [];
-    types[0].materials.forEach((material) => {
-      console.log(material.user, req.user._id.toString());
-      if (material.user === req.user._id.toString()) {
-        x.push(material);
-        return;
-      }
-    });
-    types[0].materials = x;
-  }
 
+    if (req.user.role === "user" && qr && qr.includes("Task")) {
+      const x = [];
+      types[0].materials.forEach((material) => {
+        if (material.user === req.user._id.toString()) {
+          x.push(material);
+          return;
+        }
+      });
+      types[0].materials = x;
+    }
 
- res.status(200).json({
+  res.status(200).json({
     results: types.length,
     data: { types },
   });
 });
 
 exports.createType = asyncHandler(async (req, res, next) => {
-  if (req.body.type === "task") {
-    req.body.type = "Task";
-  }
-
+  req.body.type =
+    req.body.type.charAt(0).toUpperCase() + req.body.type.slice(1);
   const check = await Type.findOne(req.body);
   if (check) return next(new ApiError(`This title already exist`, 404));
 

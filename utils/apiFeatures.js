@@ -1,8 +1,6 @@
-const User = require("../models/userModel");
 class APIFeatures {
   constructor(mongooseQuery, query) {
     this.mongooseQuery = mongooseQuery;
-
     this.query = query;
   }
 
@@ -11,9 +9,35 @@ class APIFeatures {
     const excludedFields = ["page", "limit", "fields", "sort"];
     excludedFields.forEach((field) => delete queryStringObj[field]);
     let queryStr = JSON.stringify(queryStringObj);
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|ne)\b/g, (match) => `$${match}`);
+    queryStr = queryStr.replace(
+      /\b(gt|gte|lt|lte|ne)\b/g,
+      (match) => `$${match}`
+    );
     this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
 
+    return this;
+  }
+
+  paginate(countDocuments) {
+    const { page } = this.query;
+    const { limit } = this.query;
+    const skip = (page - 1) * limit;
+
+    const endIndex = page * limit;
+    const pagination = {};
+    pagination.currentPage = page || 1;
+    pagination.limit = limit || countDocuments;
+    pagination.numberOfPages = Math.ceil(countDocuments / limit) || 1;
+    if (endIndex < countDocuments) {
+      pagination.next = +page + 1;
+    }
+    if (skip > 0) {
+      pagination.prev = +page - 1;
+    }
+
+    this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limit);
+
+    this.paginationResults = pagination;
     return this;
   }
 
@@ -37,11 +61,17 @@ class APIFeatures {
     return this;
   }
 
-  search(modelName="") {
+  search(modelName = "") {
     if (this.query.keyword) {
-      this.mongooseQuery = modelName.find({
-        name: { $regex: this.query.keyword, $options: "i" },
-      });
+      const qr = {};
+      if (modelName === "User") {
+        qr.$or = [
+          { name: { $regex: this.query.keyword, $options: "i" } },
+        ];
+      } else {
+        qr.$or = [{ type: { $regex: this.query.keyword, $options: "i" } }];
+      }
+      this.mongooseQuery = this.mongooseQuery.find(qr);
     }
 
     return this;

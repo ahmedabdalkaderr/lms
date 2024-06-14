@@ -23,9 +23,8 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
-  console.log(req.query);
-  const apiFeatures = new ApiFeatures(User, req.query);
-  apiFeatures.filter().sort().limitFields().search(User);
+  const apiFeatures = new ApiFeatures(User.find(), req.query);
+  apiFeatures.filter().sort().limitFields().search("User");
   const { mongooseQuery } = apiFeatures;
   const users = await mongooseQuery;
   
