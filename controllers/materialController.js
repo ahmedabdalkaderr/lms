@@ -26,6 +26,8 @@ exports.createMaterial = asyncHandler(async (req, res, next) => {
     user: req.user._id,
   });
   await type.save();
+  console.log(type.materials);
+
   res.status(200).json({
     status: "success",
     data: {

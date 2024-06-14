@@ -11,7 +11,7 @@ class APIFeatures {
     const excludedFields = ["page", "limit", "fields", "sort"];
     excludedFields.forEach((field) => delete queryStringObj[field]);
     let queryStr = JSON.stringify(queryStringObj);
-    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|ne)\b/g, (match) => `$${match}`);
     this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
 
     return this;

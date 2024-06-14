@@ -11,9 +11,12 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
   types.reverse();
-  if (req.user.role === 'user' && req.query.type.includes("Task")) {
+  const qr = req.query.type;
+  if (req.user.role === 'user' && qr && qr.includes("Task")) {
+    console.log(5);
     const x = [];
     types[0].materials.forEach((material) => {
+      console.log(material.user, req.user._id.toString());
       if (material.user === req.user._id.toString()) {
         x.push(material);
         return;
