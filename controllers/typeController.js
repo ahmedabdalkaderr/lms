@@ -12,8 +12,7 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   const types = await mongooseQuery;
   types.reverse();
   const qr = req.query.type;
-  if (req.user.role === 'user' && qr && qr.includes("Task")) {
-    console.log(5);
+  if (req.user.role === 'user' && qr && !qr.ne && qr.includes("Task")) {
     const x = [];
     types[0].materials.forEach((material) => {
       console.log(material.user, req.user._id.toString());
