@@ -6,27 +6,29 @@ const ApiFeatures = require("../utils/apiFeatures");
 const ApiError = require("../utils/apiError");
 
 exports.getTypes = asyncHandler(async (req, res, next) => {
-    const qr = req.query.type;
-    let filter = {};
-    if(qr && qr.ne){
-      filter = {type:{$not:/^task/i}};
-    }
+  const qr = req.query.type;
+  let filter = {};
+  if (qr && qr.ne) {
+    filter = { type: { $not: /^task/i } };
+  }
   const apiFeatures = new ApiFeatures(Type.find(filter), req.query);
   apiFeatures.filter().sort().limitFields().search("Type");
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
   types.reverse();
-
-    if (req.user.role === "user" && qr && !qr.ne & qr.includes("Task")) {
-      const x = [];
-      types[0].materials.forEach((material) => {
-        if (material.user === req.user._id.toString()) {
-          x.push(material);
-          return;
-        }
-      });
-      types[0].materials = x;
-    }
+  if (
+    req.user.role === "user" &&
+    req.query.keyword & req.query.keyword.includes("Task")
+  ) {
+    const x = [];
+    types[0].materials.forEach((material) => {
+      if (material.user === req.user._id.toString()) {
+        x.push(material);
+        return;
+      }
+    });
+    types[0].materials = x;
+  }
 
   res.status(200).json({
     results: types.length,
@@ -97,7 +99,6 @@ exports.deleteType = asyncHandler(async (req, res, next) => {
 
   type.materials.forEach(async function (el) {
     const material = await Material.findByIdAndDelete(el.id);
-    // await material.save();
   });
   res.status(204).json({
     status: "success",

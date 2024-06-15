@@ -4,6 +4,8 @@ const {
   createUserValidator,
   getUserValidator,
   updateUserValidator,
+  changeUserPasswordValidation,
+  changeLoggedUserPasswordValidation,
   deleteUserValidator,
 } = require("../utils/validators/userValidators");
 const {
@@ -18,9 +20,11 @@ const {
   createUser,
   getUser,
   updateUser,
+  changeUserPassword,
   deleteUser,
   getLoggedUser,
   updateLoggedUser,
+  changeLoggedUserPassword,
   deleteLoggedUser,
 } = require("../controllers/userController");
 
@@ -32,6 +36,18 @@ router
   .get(getLoggedUser, getUser)
   .put(uploadUserImage, resizeImage, updateLoggedUser, updateUser)
   .delete(deleteLoggedUser, deleteUser);
+
+router
+  .route("/changePassword/:id")
+  .put(allowedTo("admin"), changeUserPasswordValidation, changeUserPassword);
+
+router
+  .route("/changeMyPassword")
+  .put(
+    changeLoggedUserPasswordValidation,
+    changeLoggedUserPassword,
+    changeUserPassword
+  );
 
 router.get("/", allowedTo("admin", "instructor"), getUsers);
 router.post(

@@ -34,18 +34,20 @@ exports.getUserValidator = [
 
 exports.updateUserValidator = [
   check("id").isMongoId().withMessage("Invalid user id format"),
-  body("name").optional().isLength({min: 3}).withMessage('Too short user name'),
+  body("name")
+    .optional()
+    .isLength({ min: 3 })
+    .withMessage("Too short user name"),
 
   check("email")
     .optional()
     .isEmail()
     .withMessage("Invalid email address")
-    .custom((val, {req}) =>
+    .custom((val, { req }) =>
       User.findOne({ email: val }).then((user) => {
-        if (user && user._id != req.params.id) {
+        if (user && user._id !== req.params.id) {
           return Promise.reject(new Error("E-mail already in user"));
-        }
-        else return true;
+        } else return true;
       })
     ),
 
@@ -53,16 +55,15 @@ exports.updateUserValidator = [
   validatorMiddleware,
 ];
 
-exports.changeUserPasswordValidation = [
-  check("id").isMongoId().withMessage("Invalid User id format"),
-  body("password").notEmpty().withMessage("enter current password"),
+exports.changeLoggedUserPasswordValidation = [
+  body("currentpassword").notEmpty().withMessage("enter current password"),
   body("passwordConfirm").notEmpty().withMessage("confirm a new password"),
 
   body("password")
     .notEmpty()
     .withMessage("enter a new password")
     .custom(async (password, { req }) => {
-      const user = await User.findById(req.params.id);
+      const user = await User.findById(req.user._id);
       if (!user) throw new Error("no user for this id");
       const isCorrectPassword = await bcrypt.compare(
         req.body.currentPassword,
@@ -74,6 +75,22 @@ exports.changeUserPasswordValidation = [
         throw new Error("password confirmation incorrect");
       return true;
     }),
+  validatorMiddleware,
+];
+
+exports.changeUserPasswordValidation = [
+  check("id").isMongoId().withMessage("Invalid User id format"),
+  body("password")
+    .notEmpty()
+    .withMessage("enter a new password")
+    .custom(async (password, { req }) => {
+      const user = await User.findById(req.params.id);
+      if (!user) throw new Error("no user for this id");
+      if (password !== req.body.passwordConfirm)
+        throw new Error("password confirmation incorrect");
+      return true;
+    }),
+  body("passwordConfirm").notEmpty().withMessage("confirm a new password"),
   validatorMiddleware,
 ];
 

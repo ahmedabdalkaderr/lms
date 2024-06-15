@@ -27,7 +27,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   apiFeatures.filter().sort().limitFields().search("User");
   const { mongooseQuery } = apiFeatures;
   const users = await mongooseQuery;
-  
+
   res.status(200).json({
     results: users.length,
     data: { users },
@@ -97,11 +97,25 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   });
 });
 
-// exports.updateUserPassword = asyncHandler(async (req, res, next) => {
-//      const { id } = req.params;
-
-//      const user = 
-// });
+exports.changeUserPassword = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findByIdAndUpdate(
+    id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+    },
+    { new: true }
+  );
+  if (!user) {
+    return next(new APIError(`no user with this id ${req.params.id}`, 404));
+  }
+  return res.status(200).json({
+    message: "User updated successfully",
+    data: {
+      user,
+    },
+  });
+});
 
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
@@ -121,6 +135,11 @@ exports.getLoggedUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateLoggedUser = asyncHandler(async (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+});
+
+exports.changeLoggedUserPassword = asyncHandler(async (req, res, next) => {
   req.params.id = req.user._id;
   next();
 });
