@@ -16,18 +16,18 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   const { mongooseQuery } = apiFeatures;
   const types = await mongooseQuery;
   types.reverse();
-  if (
-    req.user.role === "user" &&
-    req.query.keyword & req.query.keyword.includes("Task")
-  ) {
-    const x = [];
-    types[0].materials.forEach((material) => {
-      if (material.user === req.user._id.toString()) {
-        x.push(material);
-        return;
-      }
-    });
-    types[0].materials = x;
+  
+  if (req.query.keyword) {
+    if (req.user.role === "user" && req.query.keyword.includes("Task")) {
+      const x = [];
+      types[0].materials.forEach((material) => {
+        if (material.user === req.user._id.toString()) {
+          x.push(material);
+          return;
+        }
+      });
+      types[0].materials = x;
+    }
   }
 
   res.status(200).json({
