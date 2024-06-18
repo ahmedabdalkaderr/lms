@@ -18,17 +18,17 @@ exports.getTypes = asyncHandler(async (req, res, next) => {
   types.reverse();
   if (req.query.keyword) {
     if (req.user.role === "user" && req.query.keyword.includes("Task")) {
-      const x = [];
-      for(i=0;i<types.length;i++){
-      types[i].materials.forEach((material) => {
-        if (material.user === req.user._id.toString()) {
-          x.push(material);
-          return;
-        }
-      });
-      types[i].materials = x;
+      for (i = 0; i < types.length; i++) {
+        const x = [];
+        types[i].materials.forEach((material) => {
+          if (material.user === req.user._id.toString()) {
+            x.push(material);
+            return;
+          }
+        });
+        types[i].materials = x;
+      }
     }
-  }
   }
 
   res.status(200).json({
