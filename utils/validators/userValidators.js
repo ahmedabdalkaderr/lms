@@ -56,7 +56,7 @@ exports.updateUserValidator = [
 ];
 
 exports.changeLoggedUserPasswordValidation = [
-  body("currentpassword").notEmpty().withMessage("enter current password"),
+  body("currentPassword").notEmpty().withMessage("enter current password"),
   body("passwordConfirm").notEmpty().withMessage("confirm a new password"),
 
   body("password")
