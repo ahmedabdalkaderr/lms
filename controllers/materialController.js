@@ -7,7 +7,7 @@ const Material = require("../models/materialModel");
 const Type = require("../models/typeModel");
 
 exports.uploadMaterialFile = uploadSingleFile("file", "materials");
-const checkMaterialType = (type) => type !== "Task";
+const checkMaterialType = (type) => !type.includes("Task");
 
 exports.createMaterial = asyncHandler(async (req, res, next) => {
   if (req.user.role === "user" && checkMaterialType(req.body.type))
