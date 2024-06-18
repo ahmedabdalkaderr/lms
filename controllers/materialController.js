@@ -87,20 +87,18 @@ exports.updateMaterial = asyncHandler(async (req, res, next) => {
     course: material.course,
   });
   const newMaterials = [];
-  type.materials.forEach((el) => {
+  type.materials.map((el) => {
     if (el.id === id) {
       newMaterials.push({
         file: material.file,
         id: material._id,
+        user: req.user._id.toString(),
         name: req.body.name,
       });
     } else newMaterials.push(el);
   });
   type.materials = newMaterials;
   await type.save();
-  if (!material) {
-    return next(new ApiError(`No material exist with this id: ${id}`, 404));
-  }
 
   return res.status(200).json({
     status: "success",
