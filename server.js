@@ -1,6 +1,7 @@
 const path = require("path");
 
 const cors = require("cors");
+// const compresstion = require("compression");
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -24,6 +25,8 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors());
+app.options("*",cors());
+// app.use(compresstion());
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
