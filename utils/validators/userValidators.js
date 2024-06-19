@@ -39,19 +39,18 @@ exports.updateUserValidator = [
     .isLength({ min: 3 })
     .withMessage("Too short user name"),
 
-  check("email")
-    .optional()
-    .isEmail()
-    .withMessage("Invalid email address")
-    .custom((val, { req }) =>
-      User.findOne({ email: val }).then((user) => {
-        if (user && user._id !== req.params.id) {
-          return Promise.reject(new Error("E-mail already in user"));
-        } else return true;
-      })
-    ),
+  // check("email")
+  //   .optional()
+  //   .isEmail()
+  //   .withMessage("Invalid email address")
+  //   .custom((val, { req }) =>
+  //     User.findOne({ email: val }).then((user) => {
+  //       if (user && user._id !== req.params.id) {
+  //         return Promise.reject(new Error("E-mail already in user"));
+  //       } else return true;
+  //     })
+  //   ),
 
-  check("role").optional(),
   validatorMiddleware,
 ];
 
