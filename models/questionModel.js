@@ -20,7 +20,10 @@ const questionSchema = new Schema(
       type: Number,
       // required: [true, "User name required"],
     },
-    year: String,
+    course: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Course",
+    },
   },
   { timestamps: true }
 );

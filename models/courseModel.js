@@ -15,7 +15,6 @@ const courseSchema = new Schema(
     },
     image: String,
     instructor: String,
-
   },
   { timestamps: true }
 );

@@ -12,7 +12,7 @@ exports.getQuestions = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     results: questions.length,
-    data: { questions },
+    data:  questions ,
   });
 });
 
@@ -43,7 +43,6 @@ exports.getQuestion = asyncHandler(async (req, res, next) => {
 
 exports.updateQuestion = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  console.log(req.body);
   const question = await Question.findByIdAndUpdate(id, req.body, { new: true });
 
   if (!question) {
