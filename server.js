@@ -14,6 +14,7 @@ const authRoute = require("./routes/authRoute");
 const courseRoute = require("./routes/courseRoute");
 const materialRoute = require("./routes/materialRoute");
 const typeRoute = require("./routes/typeRoute");
+const questionRoute = require('./routes/questionRoute');
 
 dotenv.config({ path: "config.env" });
 mongoose.connect(process.env.DB_URI).then((con) => {
@@ -43,6 +44,7 @@ app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/courses", courseRoute);
 app.use("/api/v1/materials", materialRoute);
 app.use("/api/v1/types", typeRoute);
+app.use("/api/v1/questions", questionRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`This url is not exist: ${req.url}`, 400));
