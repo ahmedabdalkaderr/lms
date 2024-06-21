@@ -7,6 +7,14 @@ const {
   updateGrade,
   deleteGrade,
 } = require("../controllers/gradeController");
+
+const {
+  createGradeValidator,
+  getGradeValidator,
+  updateGradeValidator,
+  deleteGradeValidator,
+} = require("../utils/validators/gradeValidator");
+
 const {
   isAuthenticated,
   allowedTo,
@@ -16,7 +24,7 @@ router.use(isAuthenticated);
 router
   .route("/")
   .get(getGrades)
-  .post(allowedTo("admin", "instructor"), createGrade);
+  .post(createGradeValidator, createGrade);
 
 router
   .route("/:id")

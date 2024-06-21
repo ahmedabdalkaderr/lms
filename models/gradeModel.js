@@ -8,7 +8,7 @@ const gradeSchema = new Schema(
       ref: "User",
     },
     
-    points: {
+    mark: {
       type: String,
       // required: [true, "User name required"],
     },
