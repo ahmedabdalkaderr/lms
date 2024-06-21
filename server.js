@@ -16,6 +16,7 @@ const materialRoute = require("./routes/materialRoute");
 const typeRoute = require("./routes/typeRoute");
 const questionRoute = require('./routes/questionRoute');
 const scheduleRoute = require("./routes/scheduleRoute");
+const gradeRoute = require("./routes/gradeRoute");
 
 dotenv.config({ path: "config.env" });
 mongoose.connect(process.env.DB_URI).then((con) => {
@@ -47,6 +48,8 @@ app.use("/api/v1/materials", materialRoute);
 app.use("/api/v1/types", typeRoute);
 app.use("/api/v1/questions", questionRoute);
 app.use("/api/v1/schedules", scheduleRoute);
+app.use("/api/v1/grades", gradeRoute);
+
 
 
 app.all("*", (req, res, next) => {
