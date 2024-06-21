@@ -2,6 +2,7 @@ const { check, body } = require("express-validator");
 
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const Course = require("../../models/courseModel");
+const Grade = require("../../models/gradeModel");
 
 exports.createGradeValidator = [
   body("user")
@@ -20,17 +21,26 @@ exports.createGradeValidator = [
     }),
   body("course")
     .notEmpty()
-    .withMessage("User name required")
+    .withMessage("enter course id")
     .isMongoId()
     .withMessage("Invalid course id format")
-    .custom((val, { req }) =>
+    .custom((val) =>
       Course.findById(val).then((course) => {
-        if (!req.body.user) req.body.user = req.user._id;
         if (!course) {
-          return Promise.reject(new Error("This course is not exist"));
+          return Promise.reject(new Error("No course exist with this id"));
         } else return true;
       })
     ),
+  body("course").custom((val, { req }) =>
+    Grade.findOne({ user: req.user._id, course: val }).then((grade) => {
+      if (grade) {
+        return Promise.reject(
+          new Error("You are not allowed to use this route")
+        );
+      } else return true;
+    })
+  ),
+
   body("mark").notEmpty().withMessage("Enter student mark"),
 
   validatorMiddleware,
