@@ -1,6 +1,13 @@
 const router = require("express").Router();
 
 const {
+  createScheduleValidator,
+  getScheduleValidator,
+  updateScheduleValidator,
+  deletescheduleValidator,
+} = require("../utils/validators/scheduleValidator");
+
+const {
   getSchedules,
   createSchedule,
   getSchedule,
@@ -16,7 +23,7 @@ router.use(isAuthenticated);
 router
   .route("/")
   .get(getSchedules)
-  .post(allowedTo("admin", "instructor"), createSchedule);
+  .post(allowedTo("admin", "instructor"), createScheduleValidator, createSchedule);
 
 router
   .route("/:id")
