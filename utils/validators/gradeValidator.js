@@ -24,8 +24,9 @@ exports.createGradeValidator = [
     .withMessage("enter course id")
     .isMongoId()
     .withMessage("Invalid course id format")
-    .custom((val) =>
+    .custom((val, {req}) =>
       Course.findById(val).then((course) => {
+        if(!req.body.user) req.body.user = req.user._id;
         if (!course) {
           return Promise.reject(new Error("No course exist with this id"));
         } else return true;
