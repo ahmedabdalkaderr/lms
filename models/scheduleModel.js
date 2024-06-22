@@ -15,6 +15,10 @@ const scheduleSchema = new Schema(
       type: String,
       //required: [true, ""]
     },
+    time: {
+      type: String,
+      //required: [true, ""]
+    },
     course: {
       type: mongoose.Schema.ObjectId,
       ref: "Course",
