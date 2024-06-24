@@ -49,7 +49,7 @@ router
     changeUserPassword
   );
 
-router.get("/", allowedTo("admin", "instructor"), getUsers);
+// router.get("/", allowedTo("admin", "instructor"), getUsers);
 router.post(
   "/",
   allowedTo("admin"),
@@ -61,7 +61,7 @@ router.post(
 
 router
   .route("/:id")
-  .get(allowedTo("admin", "instructor"), getUserValidator, getUser)
+  .get(getUserValidator, getUser)
   .put(
     allowedTo("admin"),
     uploadUserImage,
