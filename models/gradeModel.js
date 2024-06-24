@@ -7,7 +7,7 @@ const gradeSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       ref: "User",
     },
-    
+
     mark: {
       type: String,
       // required: [true, "User name required"],
@@ -15,6 +15,7 @@ const gradeSchema = new Schema(
 
     target: {
       type: String,
+      // required: [true, "User name required"],
     },
 
     course: {

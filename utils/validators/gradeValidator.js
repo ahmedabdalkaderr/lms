@@ -1,6 +1,7 @@
 const { check, body } = require("express-validator");
 
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
+const User = require("../../models/userModel");
 const Course = require("../../models/courseModel");
 const Grade = require("../../models/gradeModel");
 
@@ -24,16 +25,28 @@ exports.createGradeValidator = [
     .withMessage("enter course id")
     .isMongoId()
     .withMessage("Invalid course id format")
-    .custom((val, {req}) =>
+    .custom((val, { req }) =>
       Course.findById(val).then((course) => {
-        if(!req.body.user) req.body.user = req.user._id;
+        if (!req.body.user && !req.body.number) req.body.user = req.user._id;
         if (!course) {
           return Promise.reject(new Error("No course exist with this id"));
         } else return true;
       })
     ),
+  body("number")
+    .optional()
+    .custom((val, { req }) =>
+      User.findOne({ number: val }).then((user) => {
+        if (!user) {
+          return Promise.reject(new Error("No user exist with this number"));
+        } else {
+          req.body.user = user._id;
+          return true;
+        }
+      })
+    ),
   body("course").custom((val, { req }) =>
-    Grade.findOne({ user: req.user._id, course: val }).then((grade) => {
+    Grade.findOne({ user: req.body.user, course: val }).then((grade) => {
       if (grade) {
         return Promise.reject(
           new Error("You are not allowed to use this route")
@@ -41,7 +54,6 @@ exports.createGradeValidator = [
       } else return true;
     })
   ),
-
   body("mark").notEmpty().withMessage("Enter student mark"),
 
   validatorMiddleware,

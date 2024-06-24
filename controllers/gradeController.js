@@ -8,7 +8,7 @@ exports.getGrades = asyncHandler(async (req, res) => {
   apiFeatures.filter().sort().limitFields().search();
   const { mongooseQuery } = apiFeatures;
 
-  const grade = await mongooseQuery.populate({path: 'user', select: "name"});
+  const grade = await mongooseQuery.populate({path: 'user course', select: "name"});
 
   res.status(200).json({
     results: grade.length,
