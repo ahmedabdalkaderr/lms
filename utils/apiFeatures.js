@@ -66,7 +66,10 @@ class APIFeatures {
       const qr = {};
       if (modelName === "User") {
         qr.$or = [
-          { name: { $regex: this.query.keyword, $options: "i" } },
+          {
+            name: { $regex: this.query.keyword, $options: "i" },
+            number: { $regex: this.query.keyword},
+          },
         ];
       } else {
         qr.$or = [{ type: { $regex: this.query.keyword, $options: "i" } }];

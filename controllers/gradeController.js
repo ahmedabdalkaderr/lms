@@ -8,11 +8,25 @@ exports.getGrades = asyncHandler(async (req, res) => {
   apiFeatures.filter().sort().limitFields().search();
   const { mongooseQuery } = apiFeatures;
 
-  const grade = await mongooseQuery.populate({path: 'user course', select: "name"});
+  let grades = await mongooseQuery.populate({
+    path: "user course",
+    select: "name number",
+  });
+
+  if (req.user.role === "user") {
+    const newGrade = [];
+    grades.forEach((grade) => {
+      if (grade.user._id.toString() === req.user._id.toString()) {
+        newGrade.push(grade);
+        return;
+      }
+    });
+    grades = newGrade;
+  }
 
   res.status(200).json({
-    results: grade.length,
-    data: grade,
+    results: grades.length,
+    data: grades,
   });
 });
 
