@@ -17,7 +17,7 @@ const gradeSchema = new Schema(
       type: String,
       // required: [true, "User name required"],
     },
-
+    username: String,
     course: {
       type: mongoose.Schema.ObjectId,
       ref: "Course",

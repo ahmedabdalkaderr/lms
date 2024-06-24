@@ -68,7 +68,6 @@ class APIFeatures {
         qr.$or = [
           {
             name: { $regex: this.query.keyword, $options: "i" },
-            number: { $regex: this.query.keyword},
           },
         ];
       } else {

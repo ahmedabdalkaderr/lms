@@ -32,7 +32,6 @@ exports.getGrades = asyncHandler(async (req, res) => {
 
 exports.createGrade = asyncHandler(async (req, res, next) => {
   const grade = await Grade.create(req.body);
-
   res.status(201).json({
     status: "success",
     data: {

@@ -41,15 +41,17 @@ exports.createGradeValidator = [
           return Promise.reject(new Error("No user exist with this number"));
         } else {
           req.body.user = user._id;
+          req.body.username =  user.name;
           return true;
         }
       })
     ),
   body("course").custom((val, { req }) =>
     Grade.findOne({ user: req.body.user, course: val }).then((grade) => {
+      if(!req.body.username) req.body.username = req.user.name;
       if (grade) {
         return Promise.reject(
-          new Error("You are not allowed to use this route")
+          new Error("You already have your grade")
         );
       } else return true;
     })
