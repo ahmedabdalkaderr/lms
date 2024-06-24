@@ -49,7 +49,7 @@ router
     changeUserPassword
   );
 
-// router.get("/", allowedTo("admin", "instructor"), getUsers);
+router.get("/", getUsers);
 router.post(
   "/",
   allowedTo("admin"),
