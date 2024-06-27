@@ -72,8 +72,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  let pass;
-  if(req.body.password) pass = await bcrypt.hash(req.body.password, 12);
   const user = await User.findByIdAndUpdate(
     id,
     {
@@ -82,11 +80,11 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
       year: req.body.year,
       image: req.body.image,
       number: req.body.number,
-      password: pass,
     },
     { new: true }
   );
-
+    if (req.body.password) user.password = await bcrypt.hash(req.body.password, 12);
+    await user.save();
   if (!user) {
     return next(new ApiError(`No user exist with this id: ${id}`, 404));
   }
