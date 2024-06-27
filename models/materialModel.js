@@ -15,6 +15,11 @@ const materialSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Course",
     },
+
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

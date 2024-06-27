@@ -2,6 +2,7 @@ const { check, body } = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const bcrypt = require("bcrypt");
 const User = require("../../models/userModel");
+const Grade = require("../../models/gradeModel");
 
 exports.createUserValidator = [
   check("name")
@@ -94,6 +95,20 @@ exports.changeUserPasswordValidation = [
 ];
 
 exports.deleteUserValidator = [
-  check("id").isMongoId().withMessage("Invalid User id format"),
+  check("id")
+    .isMongoId()
+    .withMessage("Invalid User id format")
+    .custom((val) =>
+      Grade.findOne({ user: val }).then(async (grade) => {
+        console.log(grade);
+
+        if (grade) {
+          console.log(grade._id);
+          const id = grade._id.toString();
+          await Grade.findByIdAndDelete(id);
+        }
+        return true;
+      })
+    ),
   validatorMiddleware,
 ];

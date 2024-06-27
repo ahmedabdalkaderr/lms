@@ -83,6 +83,9 @@ exports.updateGradeValidator = [
 ];
 
 exports.deleteGradeValidator = [
-  check("id").isMongoId().withMessage("Invalid grade id format"),
+  check("id")
+    .isMongoId()
+    .withMessage("Invalid grade id format")
+  ,
   validatorMiddleware,
 ];
