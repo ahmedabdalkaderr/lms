@@ -72,7 +72,8 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-
+  let pass;
+  if(req.body.password) pass = await bcrypt.hash(req.body.password, 12);
   const user = await User.findByIdAndUpdate(
     id,
     {
@@ -81,7 +82,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
       year: req.body.year,
       image: req.body.image,
       number: req.body.number,
-      password: await bcrypt.hash(req.body.password, 12)
+      password: pass,
     },
     { new: true }
   );

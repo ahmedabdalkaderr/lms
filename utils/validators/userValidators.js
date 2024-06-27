@@ -103,7 +103,6 @@ exports.deleteUserValidator = [
         console.log(grade);
 
         if (grade) {
-          console.log(grade._id);
           const id = grade._id.toString();
           await Grade.findByIdAndDelete(id);
         }

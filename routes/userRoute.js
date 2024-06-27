@@ -63,7 +63,7 @@ router
   .route("/:id")
   .get(getUserValidator, getUser)
   .put(
-    allowedTo("admin"),
+    // allowedTo("admin"),
     uploadUserImage,
     resizeImage,
     updateUserValidator,
