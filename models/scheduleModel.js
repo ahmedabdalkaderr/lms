@@ -23,6 +23,7 @@ const scheduleSchema = new Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Course",
     },
+    target: String,
   },
   { timestamps: true }
 );
