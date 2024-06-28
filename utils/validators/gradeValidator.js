@@ -47,7 +47,7 @@ exports.createGradeValidator = [
       })
     ),
   body("course").custom((val, { req }) =>
-    Grade.findOne({ user: req.body.user, course: val }).then((grade) => {
+    Grade.findOne({ user: req.body.user, course: val, target: req.query.target }).then((grade) => {
       if(!req.body.username) req.body.username = req.user.name;
       if (grade) {
         return Promise.reject(
