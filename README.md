@@ -1,3 +1,5 @@
+### Graduation Project, Class of 2024, Faculty of Engineering, Al Azhar University.
+
 ## Project Overview
 The Learning Management System (LMS) is a web application designed to facilitate course management, including student and instructor interaction. This project allows instructors to create and organize courses, upload course materials, and administer quizzes, while students can participate in courses and track their progress. The system is built using Express.js and MongoDB for scalable and efficient course management.
 
