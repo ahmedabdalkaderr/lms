@@ -4,8 +4,10 @@ The Learning Management System (LMS) is a web application designed to facilitate
 
 ## Database Design
 1. **ERD Diagram**
+   ![image](https://github.com/user-attachments/assets/504e7dc9-9f5d-4735-b72b-109b674ec033)
 
-2. **Use Case Diagram**
+
+3. **Use Case Diagram**
    ![image](https://github.com/user-attachments/assets/44150263-c4ca-4a31-8833-29348369120e)
 
 ## Features
@@ -30,27 +32,29 @@ Compression: compression middleware for performance improvement
 
 ## Installation
 1. **Clone the repository**:
-```
-git clone https://github.com/your-username/lms.git
-```
+   ```
+   git clone https://github.com/your-username/lms.git
+   ```
 2. **Install the dependencies**:
-```
-npm install
-```
-3.**Create a .env file in the root of your project and add the following environment variables**:
+   ```
+   npm install
+   ```
+3. **Create a .env file in the root of your project and add the following environment variables**:
 
-NODE_ENV=development.
+   NODE_ENV=development.
 
-MONGO_URI=your_mongodb_connection_string.
+   MONGO_URI=your_mongodb_connection_string.
 
-JWT_SECRET=your_jwt_secret.
+   JWT_SECRET=your_jwt_secret.
 
 4. **Start the application mode**:
-for development : 
-```
-npm run dev
-```
 
-for production : 
-npm run prod
+   for development 
+   ```
+   npm run dev
+   ```
 
+   for production 
+   ```
+   npm run prod
+   ```
