@@ -14,22 +14,36 @@ The Learning Management System (LMS) is a web application designed to facilitate
 
 ## Features
 User authentication with JWT (JSON Web Tokens)
+
 Role-based access control (students, instructors, and administrators)
+
 Course management for instructors (create, update, delete courses)
+
 File uploads for course materials (using Multer and Sharp)
+
 Real-time data fetching and updates using Axios
+
 Input validation and error handling using Express Validator
+
 Log requests and errors using Morgan
+
 Password hashing with bcrypt for enhanced security
 
 ## Technologies Used
 Backend: Node.js, Express.js
+
 Database: MongoDB (via Mongoose)
+
 Authentication: JWT (jsonwebtoken)
+
 File Uploads: Multer, Sharp
+
 Security: bcrypt for password encryption
+
 Environment Configuration: dotenv
+
 Validation: express-validator
+
 Compression: compression middleware for performance improvement
 
 ## Installation
