@@ -33,7 +33,8 @@ app.options("*",cors());
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
-// mongoose.set("strictQuery", false);
+console.log(process.env.NODE_ENV);
+mongoose.set("strictQuery", true);
 
 // Middlewares
 if (process.env.NODE_ENV === "development") {
